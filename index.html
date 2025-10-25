@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>London 2025 – Travel App</title>
+  <meta name="theme-color" content="#f4f6fa" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header class="app-header">
+    <h1>London 2025</h1>
+  </header>
+
+  <!-- HERO-BANNER (statisch, wie gewünscht) -->
+  <section id="trip-info" class="trip-banner">
+    <div class="trip-overlay">
+      <div class="trip-content">
+        <h2 class="trip-title">🇬🇧 London Winter Trip 2025 / 2026</h2>
+        <p class="trip-hotel">🏨
+          <a href="https://all.accor.com/hotel/5011/index.de.shtml" target="_blank">IBIS London City – Shoreditch</a>
+        </p>
+        <p class="trip-dates">📅 28. Dez 2025 – 02. Jan 2026</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN -->
+  <main id="app">
+    <section>
+      <h2>Tage (1–6)</h2>
+      <div id="day-grid" class="grid"></div>
+    </section>
+
+    <section>
+      <h2>Ideen & Alternativen</h2>
+      <div id="ideas" class="ideas"></div>
+    </section>
+  </main>
+
+  <!-- TAGESANSICHT -->
+  <div id="sheet" class="sheet hidden">
+    <div class="sheet__header">
+      <div class="sheet__header-left">
+        <h3 id="sheetTitle">Tag</h3>
+      </div>
+      <div class="sheet__header-right">
+        <button id="prevDayTop" class="btn ghost small" title="Vorheriger Tag">⬅️</button>
+        <button id="openMap" class="btn ghost small" title="Tageskarte">🗺️</button>
+        <button id="nextDayTop" class="btn ghost small" title="Nächster Tag">➡️</button>
+        <button id="closeSheet" class="btn ghost small" title="Schließen">✖️</button>
+      </div>
+    </div>
+
+    <div class="sheet__content">
+      <div id="timeline" class="timeline"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: KARTE -->
+  <div id="mapModal" class="modal hidden">
+    <div class="modal__content">
+      <div id="map" class="map"></div>
+      <button id="closeMap" class="btn ghost modal__close">Schließen</button>
+      <div id="mapHint" class="map-hint" aria-hidden="true">🗺️ Double-click on the map to close</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="app-footer">© London 2025</footer>
+
+  <!-- SCRIPT -->
+  <script src="script.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
+    }
+  </script>
+</body>
+</html>

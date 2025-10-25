@@ -1,0 +1,21 @@
+{
+  "name": "V3 London App",
+  "short_name": "London2025",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f4f6fa",
+  "theme_color": "#2b5cff",
+  "description": "London Winter Trip 2025/2026 – interaktiver Reiseplan mit Karte und Wetter.",
+  "icons": [
+    {
+      "src": "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f1ec-1f1e7.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/128x128/1f1ec-1f1e7.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    }
+  ]
+}
