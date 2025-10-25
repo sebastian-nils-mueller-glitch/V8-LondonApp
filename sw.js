@@ -1,35 +1,60 @@
-/* === V3-LondonApp – Service Worker v9 === */
-const CACHE = "london2025-v9";
-const ASSETS = [
+/* === LondonApp V3.6 – Service Worker Light === */
+/* Ziel:
+   - Offline-Basisfunktionen (App öffnet sich aus Cache)
+   - Keine harten Reload-Probleme (keine Stuck-Versionen)
+   - Automatische Aktualisierung bei neuem Deployment
+*/
+
+const CACHE_NAME = "london2025-v36";
+const OFFLINE_URLS = [
   "./",
   "./index.html",
   "./style.css",
   "./script.js",
-  "./manifest.json",
-  "./london2025_data.json"
+  "./london2025_data.json",
+  "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css",
+  "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
 ];
 
-self.addEventListener("install", (e) => {
-  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ASSETS)));
+/* Install: Cache-Dateien laden */
+self.addEventListener("install", (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(OFFLINE_URLS))
+  );
+  self.skipWaiting();
 });
 
-self.addEventListener("activate", (e) => {
-  e.waitUntil(
+/* Aktivierung: Alte Caches löschen */
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
     caches.keys().then((keys) =>
-      Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))
+      Promise.all(keys.map((key) => {
+        if (key !== CACHE_NAME) return caches.delete(key);
+      }))
     )
+  );
+  self.clients.claim();
+});
+
+/* Fetch: Netzwerk bevorzugen, Fallback auf Cache */
+self.addEventListener("fetch", (event) => {
+  const request = event.request;
+  if (request.method !== "GET") return;
+
+  event.respondWith(
+    fetch(request)
+      .then((response) => {
+        const clone = response.clone();
+        caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+        return response;
+      })
+      .catch(() => caches.match(request).then((res) => res || caches.match("./index.html")))
   );
 });
 
-self.addEventListener("fetch", (e) => {
-  const url = new URL(e.request.url);
-  if (url.origin === location.origin) {
-    e.respondWith(
-      caches.match(e.request).then((r) => r || fetch(e.request))
-    );
-  } else {
-    e.respondWith(
-      fetch(e.request).catch(() => caches.match("./index.html"))
-    );
+/* Force Update Handler (optional) */
+self.addEventListener("message", (event) => {
+  if (event.data === "skipWaiting") {
+    self.skipWaiting();
   }
 });
